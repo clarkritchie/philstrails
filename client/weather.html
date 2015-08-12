@@ -4,7 +4,11 @@
             {{#if atLeastOnePoacher ../segments}}
                 <li class="lead">
                     <img src="{{getWeatherIcon}}"/>
-                    {{getHour}} ago it was <strong>{{getWeatherDescription}}</strong>.  Who rode <strong>{{{getRandomPoacher ../segments}}}</strong>?
+                    {{getHour}} ago it was <strong>{{getWeatherDescription}}</strong>.
+
+                    <small>
+                        Click to see who rode <strong>{{{getPoacher}}}</strong>.
+                    </small>
                 </li>
             {{/if}}
         {{/each}}
