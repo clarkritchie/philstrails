@@ -1,0 +1,12 @@
+settings.json
+*.sublime-project
+*.sublime-workspace
+*.bak
+*.swp
+.meteor/.id
+.demeteorized/*
+.idea/*
+**/.DS_Store
+.meteor/versions
+settings.json
+server/kadira.js
