@@ -5,7 +5,7 @@
     </head>
     <body>
         <div class="site-wrapper">
-            <!-- for our debugging -->
+            <!-- debugging -->
             <span class="label label-primary">Debugging</span>
             <select id="city">
                 <option value="5713587">Bend, OR</option>
@@ -13,25 +13,21 @@
                 <option value="2643741">London, GB</option>
                 <option value="2948746">Binzen, DE</option>
                 <option value="2189529">Invercargill, NZ</option>
-                <!-- <option value="2189529">Invercargill, NZ</option>
-                <option value="2189529">Invercargill, NZ</option>
-                <option value="2189529">Invercargill, NZ</option>
-                <option value="2189529">Invercargill, NZ</option>
-                <option value="2189529">Invercargill, NZ</option>
-                <option value="2189529">Invercargill, NZ</option>
-                <option value="2189529">Invercargill, NZ</option> -->
             </select>
 
             <div class="site-wrapper-inner">
                 <div class="cover-container">
                     <div class="inner cover">
                         <h1 class="cover-heading">{{title}}</h1>
-                        {{weatherData}}
-                        <p class="lead weather"></p>
-                        <h3 class="cover-heading message"></h3>
-                        <img class="hidden" id="wheel" src="img/noun_168576_cc.png" alt="" width="100" height="100">
-                        <img class="hidden" id="sad-face" src="img/noun_50979_cc.png" alt="" width="100" height="100">
-                        <div id="strava"></div>
+
+                        <p class="lead">
+                            {{weatherString}}
+                        </p>
+
+                        {{>image}}
+
+                        {{>weather}}
+
                         <p>
                             <a class="btn btn-primary btn-lg" href="http://forums.mtbr.com/oregon/phils-trail-complex-soils-101-why-riding-when-wet-muddy-causes-trail-damage-896305.html" role="button">
                                 Learn more
