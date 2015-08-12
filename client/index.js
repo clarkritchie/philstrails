@@ -1,19 +1,19 @@
-var weatherDep = new Tracker.Dependency;
-var _stravaTemplate; // handle to template instance
-
-function updateWeather() {
-    Meteor.call('getTodaysWeather', $('#city').val(), function(err, res) {
-        if (err) {
-            console.log("err: ", err);
-        } else {
-            weatherDep.changed();
-        }
-    });
-}
+// handles to template instances
+var _stravaTemplate;
+var _weatherTemplate;
 
 Template.index.onRendered(function() {
-    // console.log("onRendered: ", this.data.weather.fetch());
-    updateWeather();
+    Meteor.call('getTodaysWeather', $('#city').val(), function(err, res) {
+        if (err) {
+            throw new Error('getTodaysWeather: ', err);
+        } else {
+            Meteor.call('getStravaData', function(err) {
+                if (err) {
+                    throw new Error('getStrava: ', err);
+                }
+            });
+        }
+    });
 });
 
 function getRandomPositiveString() {
@@ -22,8 +22,7 @@ function getRandomPositiveString() {
         "w00t!",
         "Cools."
     ]
-    var x = Math.floor(Math.random() * (options.length));
-    return options[x];
+    return options[Math.floor(Math.random() * (options.length))];
 }
 
 function getRandomNegativeString() {
@@ -31,105 +30,30 @@ function getRandomNegativeString() {
         "Eff!",
         "Drat.",
         "Oh Noes!",
-        "Boo!"
+        "Boo!",
+        "Aw shucks.",
+        "Shoot."
     ]
-    var x = Math.floor(Math.random() * (options.length));
-    return options[x];
+    return options[Math.floor(Math.random() * (options.length))];
 }
 
 Template.index.helpers({
     title: function() {
         return "Is it dry at Phil's Trail?"
     },
-    weatherData: function() {
-        weatherDep.depend();
-
-        // can't proceed unless the DOM is ready
-        if (!$(document).ready()) {
-            return;
-        }
-
-        var rained = false;
-        var rainTypes = [];
-        var weather = Weather.findOne();
-        if (weather) {
-            _.each(weather.list, function(hourWeather) {
-                // console.log(hourWeather);
-                var w = _.first(hourWeather.weather);
-                if (w && w.id >= 500 && w.id < 600) {
-                    // console.log(w);
-                    rained = true;
-                    // keep track of the rain kind
-                    if (_.findWhere(rainTypes, {id: w.id}) == null) {
-                        rainTypes.push(w);
-                    }
-                }
-            });
-        }
-        rainTypes = _.uniq(rainTypes);
-
-        // console.log("rained? ",rained);
-        // console.log("rainTypes: ",rainTypes);
-
-        // http://localhost:3000/img/noun_168576_cc.png
-        if (!rained) {
-            // cleanup UI
-            if (_stravaTemplate) {
-                $("#sad-face").addClass('hidden');
-                Blaze.remove(_stravaTemplate);
+    weatherString: function() {
+        if ($(document).ready()) {
+            if (this.weather.length === 0) {
+                return getRandomPositiveString() + "  There hasn't been been any rain or snow in the last 24 hours."
+            } else {
+                return getRandomNegativeString() + "  There's been some weather."
             }
-            // end cleanup
-
-            $('.weather').text( getRandomPositiveString() + "  There hasn't been been any rain or snow in the last 24 hours.");
-            $('.message').text("Go ride your bike!");
-            $("#wheel").removeClass('hidden').animate({
-                left: '250px',
-                opacity: '0.5',
-                height: '300px',
-                width: '300px'
-            });
-        } else {
-            // cleanup UI
-            $("#wheel").addClass('hidden');
-            $('.message').text("");
-            if (_stravaTemplate) {
-                Blaze.remove(_stravaTemplate);
-            }
-            // end cleanup
-
-            var str = getRandomNegativeString() + "  There has been ";
-            var n = 0;
-            _.each(rainTypes, function(rainType) {
-                str += rainType.description;
-                n++;
-                if (n < rainTypes.length) {
-                    str += ", ";
-                }
-                if (n === (rainTypes.length - 1)) {
-                    str += " and ";
-                }
-            });
-            str += ".";
-            $('.weather').text(str);
-            $("#sad-face").removeClass('hidden').animate({
-                left: '250px',
-                opacity: '0.5',
-                height: '300px',
-                width: '300px'
-            });
-            // data supplied by IR data context
-            _stravaTemplate = Blaze.render(Template.strava, document.getElementById("strava"));
-            Meteor.call('getStravaData', function(err) {
-                if (err) {
-                    console.log("getStrava err: ", err);
-                }
-            });
         }
-
     }
 });
 
 Template.index.events({
+    // for debugging
     'change #city': function(e) {
         e.preventDefault();
         updateWeather();

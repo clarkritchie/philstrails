@@ -1,3 +1,4 @@
+
 if (Meteor.isServer) {
     Meteor.startup(function() {
         // nothing
@@ -12,14 +13,7 @@ if (Meteor.isServer) {
 
     // Returns a random integer between min (inclusive) and max (inclusive)
     // Using Math.round() will give you a non-uniform distribution!
-    function getRandomInt(min, max) {
-        return Math.floor(Math.random() * (max - min + 1)) + min;
-    }
 
-    function getTimestamp() {
-        // returns time in seconds
-        return Math.round(new Date().getTime() / 1000);
-    }
 
     function fetchWeather(id, cityId) {
         var weatherUrl = "http://api.openweathermap.org/data/2.5/history/city?id=" + cityId + "&type=day";
@@ -48,10 +42,8 @@ if (Meteor.isServer) {
                 if (weather) {
                     id = weather._id;
                 }
-                console.log("last weather insert more than 10 min ago, city changed or no weather");
+                // console.log("last weather insert more than 10 min ago, city changed or no weather");
                 fetchWeather(id, cityId);
-            } else {
-                console.log("no weather fetch required");
             }
         },
         getStravaData: function() {
@@ -104,7 +96,6 @@ if (Meteor.isServer) {
             // https://www.discovermeteor.com/blog/wrapping-npm-packages/
             stravaSegmentsSync(segmentData, Meteor.bindEnvironment(function(err, res) {
                 if (err) {
-                    // console.log("stravaSegmentsSync Err: ",err);
                     throw new Error('stravaSegmentsSync Err: ', err);
                 } else {
                     console.log("*** ", res);
@@ -126,10 +117,9 @@ if (Meteor.isServer) {
 
                         stravalListEffortsSync(segmentFilter, Meteor.bindEnvironment(function(err, res) {
                             if (err) {
-                                // console.log("stravalListEffortsSync Err: ",err);
                                 throw new Error('stravalListEffortsSync Err: ', err);
                             } else {
-                                console.log("stravalListEffortsSync *** ", res);
+                                // console.log("stravalListEffortsSync *** ", res);
                                 _.each(res, function(item) {
                                     if (!Segments.findOne({id: item.id})) {
                                         Segments.insert(item);

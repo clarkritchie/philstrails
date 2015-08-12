@@ -1,4 +1,12 @@
 <template name="weather">
-    <button>Click Me</button>
-    <p>You've pressed the button {{counter}} times.</p>
+    <ul class="list-unstyled">
+        {{#each weather}}
+            {{#if atLeastOnePoacher ../segments}}
+                <li class="lead">
+                    <img src="{{getWeatherIcon}}"/>
+                    {{getHour}} ago it was <strong>{{getWeatherDescription}}</strong>.  Who rode <strong>{{{getRandomPoacher ../segments}}}</strong>?
+                </li>
+            {{/if}}
+        {{/each}}
+    </ul>
 </template>
