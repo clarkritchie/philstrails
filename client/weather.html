@@ -1,12 +1,31 @@
 <template name="weather">
-    <ul class="list-unstyled">
+    <div class="row">
         {{#each weather}}
             {{#if atLeastOnePoacher ../segments}}
-                <li class="lead">
+                <div class="col-sm-4">
+                    <ul class="list-unstyled">
+                        <li>
+                            <img src="{{getWeatherIcon}}"/>
+                        </li>
+                        <li class="lead">
+                            <strong>{{getHour}} ago</strong> it was <strong>{{getWeatherDescription}}</strong>, and <strong>{{getCount}}</strong> rode including <strong>{{{getPoacher}}}</strong>
+                        </li>
+                    </ul>
+                </div>
+            {{/if}}
+        {{/each}}
+    </div>
+    <!-- <ul class="list-unstyled">
+        {{#each weather}}
+            {{#if atLeastOnePoacher ../segments}}
+                <li>
                     <img src="{{getWeatherIcon}}"/>
-                    {{getHour}} ago it was <strong>{{getWeatherDescription}}</strong>.  Who rode <strong>{{{getRandomPoacher ../segments}}}</strong>?
+                </li>
+                <li class="lead">
+                    {{getHour}} ago it was <strong>{{getWeatherDescription}}</strong>,
+                    {{getCount}} rode, including <strong>{{{getPoacher}}}</strong>.
                 </li>
             {{/if}}
         {{/each}}
-    </ul>
+    </ul> -->
 </template>

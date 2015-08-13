@@ -1,5 +1,4 @@
 <template name="index">
-    <!-- Bootstrap template: http://getbootstrap.com/examples/cover/# -->
     <head>
         <title>{{title}}</title>
     </head>
@@ -17,16 +16,16 @@
 
             <div class="site-wrapper-inner">
                 <div class="cover-container">
-                    <div class="inner cover">
+                    <div class="inner cover" id="main-panel">
                         <h1 class="cover-heading">{{title}}</h1>
 
                         <p class="lead">
-                            {{weatherString}}
+                            {{{weatherString}}}
                         </p>
 
-                        {{>image}}
+                        <img class="large-image" src="{{icon}}" alt="" width="300" height="300">
 
-                        {{>weather}}
+                        <div id="weather"></div>
 
                         <p>
                             <a class="btn btn-primary btn-lg" href="http://forums.mtbr.com/oregon/phils-trail-complex-soils-101-why-riding-when-wet-muddy-causes-trail-damage-896305.html" role="button">
