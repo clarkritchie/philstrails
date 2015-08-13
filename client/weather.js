@@ -1,5 +1,6 @@
 var _weatherIconBase = "http://openweathermap.org/img/w/";
 var _randomPoacher;
+var _countByHour;
 
 Template.weather.onRendered(function() {
     // nothing
@@ -19,10 +20,12 @@ function setPoacher(time, segments) {
 
     // if at least one person rode the segment during the timeframe
     if (filteredSegments.length) {
+        _countByHour = filteredSegments.length;
         _randomPoacher = filteredSegments[Math.floor(Math.random() * (filteredSegments.length))];
         // console.log("Setting _randomPoacher: ",_randomPoacher);
         return true;
     }
+    _countByHour = 0;
     return false;
 }
 
@@ -49,7 +52,7 @@ Template.weather.helpers({
         // console.log("? ",setPoacher(this.time, segments));
         return setPoacher(this.time, segments);
     },
-    getPoacher: function(segments) {
+    getPoacher: function() {
         // if at least one person rode the segment during the timeframe
         // console.log("_randomPoacher: ", _randomPoacher);
         if (_randomPoacher) {
@@ -58,6 +61,12 @@ Template.weather.helpers({
             str += '</a>';
             return str;
         }
+    },
+    getCount: function() {
+        if (_countByHour === 1) {
+            return _countByHour + ' person';
+        };
+        return _countByHour + ' people';
     }
 });
 

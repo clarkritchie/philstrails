@@ -32,17 +32,16 @@ if (Meteor.isServer) {
     Meteor.methods({
         getTodaysWeather: function(cityId) {
             var weather = Weather.findOne({}, {sort: {timestamp: -1}});
-
-            if (weather.city_id != cityId) {
+            if (weather && weather.city_id != cityId) {
                 Weather.remove({});
             }
-            var now = getTimestamp();
-            if ((weather.city_id != cityId) || !weather || (now - weather.timestamp > 600)) {
-                var id = null;
-                if (weather) {
-                    id = weather._id;
-                }
-                // console.log("last weather insert more than 10 min ago, city changed or no weather");
+
+            if (!weather) {
+                // no data in db
+                fetchWeather(id, cityId);
+            } else if ((weather.city_id != cityId) || (getTimestamp() - weather.timestamp > 600)) {
+                var id = weather._id;
+                // last weather insert more than 10 min ago or city changed
                 fetchWeather(id, cityId);
             }
         },
@@ -98,9 +97,9 @@ if (Meteor.isServer) {
                 if (err) {
                     throw new Error('stravaSegmentsSync Err: ', err);
                 } else {
-                    console.log("*** ", res);
+                    // console.log("*** ", res);
                     _.each(res.segments, function(segment) {
-                        console.log("*** Segment:  ", segment);
+                        // console.log("*** Segment:  ", segment);
                         // console.log("*** Segment:  ", segment.name + ", id: " + segment.id);
                         var date = new Date();
                         var dateOffset = (24*60*60*1000) * 1; // 1 day
