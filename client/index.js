@@ -12,7 +12,6 @@ function updateWeather() {
                 { queue: false, duration: 'slow' }
         );
 
-        console.log("Switch to city ID #",$('#city').val());
         Meteor.call('getTodaysWeather', $('#city').val(), function(err, res) {
             if (err) {
                 throw new Error('getTodaysWeather: ', err);
@@ -84,14 +83,13 @@ Template.index.helpers({
         if ($(document).ready()) {
             if (this.weather && this.weather.length === 0) {
                 if (_weatherTemplate) {
-                    console.log("** remove weather template instance");
+                    // console.log("** remove weather template instance");
                     Blaze.remove(_weatherTemplate);
                     _weatherTemplate = null;
                 }
                 return 'img/noun_168576_cc.png';
             } else {
                 if (!_weatherTemplate) {
-                    console.log(">> render weather template");
                     _weatherTemplate = Blaze.renderWithData(Template.weather, Template.currentData(), document.getElementById('weather'));
                 }
                 return 'img/noun_50979_cc.png';
