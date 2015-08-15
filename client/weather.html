@@ -1,14 +1,15 @@
 <template name="weather">
     <div class="row">
         {{#each weather}}
-            {{#if atLeastOnePoacher ../segments}}
-                <div class="col-sm-4">
+            {{count}}
+            {{#if atLeastOnePoacher time ../segments}}
+                <div class="{{colWidth}}">
                     <ul class="list-unstyled">
                         <li>
                             <img src="{{getWeatherIcon}}"/>
                         </li>
                         <li class="lead">
-                            <strong>{{getHour}} ago</strong> it was <strong>{{getWeatherDescription}}</strong>, and <strong>{{getCount}}</strong> rode including <strong>{{{getPoacher}}}</strong>
+                            <strong>{{getHour}}</strong>, it was <strong>{{getWeatherDescription}}</strong>, and <strong>{{getCount}}</strong> rode including <strong>{{{getPoacher}}}</strong>
                         </li>
                     </ul>
                 </div>

@@ -23,6 +23,9 @@ if (Meteor.isServer) {
                     // console.log("err: ", err);
                 } else {
                     // console.log("res: ", res.data);
+                    _.each(res.data.list, function(item) {
+                        console.log(item);
+                    });
                     res.data._id = id || Random.id();
                     Weather.insert(res.data);
                 }
