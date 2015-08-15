@@ -1,32 +1,21 @@
 <template name="weather">
     <div class="row">
-        {{#each weather}}
-            {{count}}
-            {{#if atLeastOnePoacher time ../segments}}
-                <div class="{{colWidth}}">
-                    <ul class="list-unstyled">
-                        <li>
-                            <img src="{{getWeatherIcon}}"/>
-                        </li>
-                        <li class="lead">
-                            <strong>{{getHour}}</strong>, it was <strong>{{getWeatherDescription}}</strong>, and <strong>{{getCount}}</strong> rode including <strong>{{{getPoacher}}}</strong>
-                        </li>
-                    </ul>
-                </div>
-            {{/if}}
+        {{#each getPoachers}}
+            <div class="col-md-4">
+                <ul class="list-unstyled">
+                    <li>
+                        <img src="http://openweathermap.org/img/w/{{weather.weather.icon}}.png"/>
+                    </li>
+                    <li class="lead">
+                        <strong>{{getFormattedHour weather.hour}}</strong>
+                        it was <strong>{{weather.weather.description}}</strong>, and at least
+                        <strong>{{getFormattedCount count}}</strong> rode
+                        <strong>
+                            <a href="https://www.strava.com/activities/{{segment.activity.id}}">{{segment.segment.name}}</a>
+                    </strong>
+                    </li>
+                </ul>
+            </div>
         {{/each}}
     </div>
-    <!-- <ul class="list-unstyled">
-        {{#each weather}}
-            {{#if atLeastOnePoacher ../segments}}
-                <li>
-                    <img src="{{getWeatherIcon}}"/>
-                </li>
-                <li class="lead">
-                    {{getHour}} ago it was <strong>{{getWeatherDescription}}</strong>,
-                    {{getCount}} rode, including <strong>{{{getPoacher}}}</strong>.
-                </li>
-            {{/if}}
-        {{/each}}
-    </ul> -->
 </template>
