@@ -4,6 +4,7 @@ if (Meteor.isServer) {
         // nothing
     });
 
+    // Useful links:
     // https://github.com/UnbounDev/node-strava-v3
     // http://strava.github.io/api/
     // http://www.gps-coordinates.net/
@@ -11,21 +12,13 @@ if (Meteor.isServer) {
     // http://openweathermap.org/find
     // http://openweathermap.org/help/city_list.txt
 
-    // Returns a random integer between min (inclusive) and max (inclusive)
-    // Using Math.round() will give you a non-uniform distribution!
-
-
     function fetchWeather(id, cityId) {
         var weatherUrl = "http://api.openweathermap.org/data/2.5/history/city?id=" + cityId + "&type=day";
         HTTP.call("GET", weatherUrl, null,
             function(err, res) {
                 if (err) {
-                    // console.log("err: ", err);
+                    throw new Error('fetchWeather Err: ', err);
                 } else {
-                    // console.log("res: ", res.data);
-                    _.each(res.data.list, function(item) {
-                        console.log(item);
-                    });
                     res.data._id = id || Random.id();
                     Weather.insert(res.data);
                 }
@@ -57,9 +50,6 @@ if (Meteor.isServer) {
             // npm install foo
 
             var strava = Meteor.npmRequire('strava-v3');
-            // process.env.STRAVA_CLIENT_SECRET = Meteor.settings.STRAVA_CLIENT_SECRET;
-            // process.env.STRAVA_ACCESS_TOKEN = Meteor.settings.STRAVA_ACCESS_TOKEN;
-            // process.env.STRAVA_CLIENT_ID = Meteor.settings.STRAVA_CLIENT_ID;
 
             // boundaries of our box from which we will get all segments
             var ne = {
@@ -100,16 +90,12 @@ if (Meteor.isServer) {
                 if (err) {
                     throw new Error('stravaSegmentsSync Err: ', err);
                 } else {
-                    // console.log("*** ", res);
                     _.each(res.segments, function(segment) {
-                        // console.log("*** Segment:  ", segment);
-                        // console.log("*** Segment:  ", segment.name + ", id: " + segment.id);
                         var date = new Date();
                         var dateOffset = (24*60*60*1000) * 1; // 1 day
                         var endDate = date.toISOString(); // now
                         date.setTime(date.getTime() - dateOffset);
                         var beginDate = date.toISOString();
-                        // console.log("From " + beginDate + " to " + endDate);
                         var segmentFilter ={
                             id: segment.id,
                             start_date_local: beginDate,
@@ -121,13 +107,12 @@ if (Meteor.isServer) {
                             if (err) {
                                 throw new Error('stravalListEffortsSync Err: ', err);
                             } else {
-                                // console.log("stravalListEffortsSync *** ", res);
                                 _.each(res, function(item) {
                                     if (!Segments.findOne({id: item.id})) {
                                         Segments.insert(item);
                                     }
                                 });
-                                // console.log("Delete older than:", segmentFilter.start_date_local);
+                                // delete items older than start_date_local
                                 Segments.remove(
                                     { start_date: { $lt: segmentFilter.start_date_local } }
                                 );

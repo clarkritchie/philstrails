@@ -1,8 +1,4 @@
-var _weatherIconBase = "http://openweathermap.org/img/w/";
-
 Template.weather.onRendered(function() {
-    // nothing
-    // console.log("weather.onRendered", this.data);
     // console.log("weather.onRendered", this.data.weather.length);
 });
 
@@ -14,10 +10,10 @@ Template.weather.helpers({
             // weather.time is in seconds
             var isoTime = new Date(weather.time * 1000).toISOString();
             var isoTimePlusOneHour = new Date((weather.time + 3600) * 1000).toISOString();
-            console.log("Time range: ",isoTime, " to ", isoTimePlusOneHour);
+            // console.log("Time range: ",isoTime, " to ", isoTimePlusOneHour);
 
             var filteredSegments = _.filter(self.segments, function(segment) {
-                console.log(segment.start_date_local + " ? vs. " + isoTime + " to " + isoTimePlusOneHour );
+                // console.log(segment.start_date_local + " ? vs. " + isoTime + " to " + isoTimePlusOneHour );
                 return segment.start_date_local >= isoTime && segment.start_date_local <= isoTimePlusOneHour;
             });
 
@@ -29,14 +25,9 @@ Template.weather.helpers({
                     segment: filteredSegments[Math.floor(Math.random() * (filteredSegments.length))]
                 }
 
-                console.log("Random Poacher: ",poacher);
                 poachers.push(poacher);
-            } else {
-                console.log("nobody rode");
-            }
-
+            } // else would be if nobody rode during the hour there was bad weather
         });
-        console.log("poachers: ",poachers)
         return poachers;
     },
     getFormattedHour: function(hour) {
