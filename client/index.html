@@ -4,15 +4,18 @@
     </head>
     <body>
         <div class="site-wrapper">
-            <!-- debugging -->
-            <span class="label label-primary">Debugging</span>
-            <select id="city">
-                <option value="5713587">Bend, OR</option>
-                <option value="6241325">Rotorura, NZ</option>
-                <option value="2643741">London, GB</option>
-                <option value="2948746">Binzen, DE</option>
-                <option value="2189529">Invercargill, NZ</option>
-            </select>
+
+            {{#if showDebugger}}
+                <!-- debugging -->
+                <span class="label label-primary">Debugging</span>
+                <select id="city">
+                    <option value="5713587">Bend, OR</option>
+                    <option value="6241325">Rotorura, NZ</option>
+                    <option value="2643741">London, GB</option>
+                    <option value="2948746">Binzen, DE</option>
+                    <option value="2189529">Invercargill, NZ</option>
+                </select>
+            {{/if}}
 
             <div class="site-wrapper-inner">
                 <div class="cover-container">
@@ -24,7 +27,6 @@
                         </p>
 
                         <img class="large-image" src="{{icon}}" alt="" width="300" height="300">
-
                         <div id="weather"></div>
 
                         <p>

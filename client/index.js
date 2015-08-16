@@ -95,6 +95,12 @@ Template.index.helpers({
                 return 'img/noun_50979_cc.png';
             }
         }
+    },
+    // lame UI hack to show/hide the debugger
+    // Session.set("debugger", true) or Session.set("debugger", false)
+    // in console
+    showDebugger: function() {
+        return Session.get("debugger") || false;
     }
 });
 
