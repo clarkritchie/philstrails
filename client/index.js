@@ -98,7 +98,7 @@ Template.index.helpers({
     },
     // lame UI hack to show/hide the debugger
     // Session.set("debugger", true) or Session.set("debugger", false)
-    // in console
+    // in console -- or shift+click the 'Learn more' button
     showDebugger: function() {
         return Session.get("debugger") || false;
     }
@@ -109,5 +109,12 @@ Template.index.events({
     'change #city': function(e) {
         e.preventDefault();
         updateWeather();
+    },
+    'click .btn-primary': function(e) {
+        if (e.shiftKey) {
+            e.preventDefault();
+            // toggle our session key so the debug window shows/hides
+            Session.set("debugger", ! (Session.get("debugger") || false));
+        }
     }
 });
