@@ -1,3 +1,6 @@
+var _numPoachers;
+var _colAdjusted;
+
 Template.weather.onRendered(function() {
     // console.log("weather.onRendered", this.data.weather.length);
 });
@@ -6,6 +9,8 @@ Template.weather.helpers({
     getPoachers: function() {
         var poachers = [];
         var self = this;
+        _colAdjusted = false;
+        var index = 0; // Spacebars lacks support for the @index helper, WTF?
         _.each(this.weather, function(weather) {
             // weather.time is in seconds
             var isoTime = new Date(weather.time * 1000).toISOString();
@@ -20,6 +25,7 @@ Template.weather.helpers({
             // if at least one person rode the segment during the timeframe
             if (filteredSegments.length) {
                 var poacher = {
+                    index: index++,
                     weather: weather,
                     count: filteredSegments.length, // total number of segment rides in that hour
                     segment: filteredSegments[Math.floor(Math.random() * (filteredSegments.length))]
@@ -28,6 +34,15 @@ Template.weather.helpers({
                 poachers.push(poacher);
             } // else would be if nobody rode during the hour there was bad weather
         });
+
+        // poachers.push( {
+        //     index: _.last(poachers).index + 1,
+        //     weather: _.last(poachers).weather,
+        //     count: _.last(poachers).count,
+        //     segment: _.last(poachers).segment
+        // });
+        // console.log(poachers);
+        _numPoachers = poachers.length;
         return poachers;
     },
     getFormattedHour: function(hour) {
@@ -56,6 +71,27 @@ Template.weather.helpers({
                 break;
         }
         return str;
+    },
+    getColWidth: function(index) {
+        // index is 0 based
+        index = index + 1;
+        width = 'col-md-4';
+        // console.log("index:", index, ", _numPoachers: ", _numPoachers);
+        // var mod = index % _numPoachers;
+        // console.log("mod: ", mod);
+        if (!_colAdjusted && index >= _numPoachers - 1) {
+            if (index === _numPoachers - 1) {
+                // 2nd to last
+                width += ' col-md-offset-2'
+                _colAdjusted = true;
+            } else if (index === _numPoachers) {
+                // last
+                width += ' col-md-offset-4';
+                _colAdjusted = true;
+            }
+        }
+
+        return width;
     }
 });
 
